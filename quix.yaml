@@ -231,8 +231,8 @@ topics:
     configuration:
       partitions: 2
       replicationFactor: 2
-      retentionInMinutes: 43200
-      retentionInBytes: 262144000
+      retentionInMinutes: 10080
+      retentionInBytes: 52428800
   - name: rawdata
     persisted: false
     configuration:
