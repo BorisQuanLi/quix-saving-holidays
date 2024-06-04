@@ -50,7 +50,7 @@ deployments:
         inputType: Secret
         description: ''
         required: true
-        secretKey: hivemq
+        secretKey: hivemq_dot_cloud_default
   - name: "\U0001F4BE InfluxDB Machine Data"
     application: write_rawdata
     deploymentType: Service
