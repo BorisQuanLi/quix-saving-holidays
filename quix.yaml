@@ -225,7 +225,7 @@ topics:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: 43200
-      retentionInBytes: 262144000
+      retentionInBytes: 52428800
   - name: detection-results
     persisted: false
     configuration:
