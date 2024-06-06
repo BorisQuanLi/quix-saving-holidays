@@ -5,3 +5,9 @@ opentelemetry-sdk
 opentelemetry-instrumentation-kafka-python
 opentelemetry-exporter-otlp-proto-http
 opentelemetry-exporter-otlp-proto-grpc
+
+# Quix deployment "InfluxDB Machine Data" reported that
+# ModuleNotFoundError: No module named 'pandas'
+# File "/app/main.py", line 3, in <module>
+#    import pandas as pd
+pandas
