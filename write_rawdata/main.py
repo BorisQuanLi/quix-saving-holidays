@@ -1,4 +1,5 @@
-import quixstreams as qx
+# import quixstreams as qx
+from quixstreams import Application, State
 import os
 import pandas as pd
 from influxdb_client_3 import InfluxDBClient3, Point, WritePrecision
@@ -37,11 +38,16 @@ span_processor = BatchSpanProcessor(otlp_http_exporter)
 trace.get_tracer_provider().add_span_processor(span_processor)
 
 
-client = qx.QuixStreamingClient()
+# client = qx.QuixStreamingClient()
+app = Application(
+    broker_address=os.environ["QUIX_BROKER_ADDRESS"],
+    consumer_group="empty-destination"
+)
 
 # get the topic consumer for a specific consumer group
-topic_consumer = client.get_topic_consumer(topic_id_or_name = os.environ["input"],
-                                           consumer_group = "empty-destination")
+# topic_consumer = client.get_topic_consumer(topic_id_or_name = os.environ["input"],
+#                                           consumer_group = "empty-destination")
+topic_consumer = app.topic(name= os.environ["input"])
 
 # Read the environment variable and convert it to a list
 tag_columns = ast.literal_eval(os.environ.get('INFLUXDB_TAG_COLUMNS', "[]"))
@@ -55,7 +61,7 @@ client = InfluxDBClient3(token=os.environ["INFLUXDB_TOKEN"],
                          database=os.environ["INFLUXDB_DATABASE"])
 
 
-def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
+def on_dataframe_received_handler(stream_consumer, df: pd.DataFrame):
     try:
         # Reformat the dataframe to match the InfluxDB format
         df = df.rename(columns={'timestamp': 'time'})
@@ -68,7 +74,7 @@ def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.Dat
         print("Write failed")
 
 
-def on_event_data_received_handler(stream_consumer: qx.StreamConsumer, data: qx.EventData):
+def on_event_data_received_handler(stream_consumer, data):
     with data:
         print(data)
         tracedata = data.tags
@@ -102,7 +108,7 @@ def on_event_data_received_handler(stream_consumer: qx.StreamConsumer, data: qx.
         
 
 
-def on_stream_received_handler(stream_consumer: qx.StreamConsumer):
+def on_stream_received_handler(stream_consumer):
     # subscribe to new DataFrames being received
     # if you aren't familiar with DataFrames there are other callbacks available
     # refer to the docs here: https://docs.quix.io/sdk/subscribe.html
@@ -117,4 +123,4 @@ topic_consumer.on_stream_received = on_stream_received_handler
 print("Listening to streams. Press CTRL-C to exit.")
 
 # Handle termination signals and provide a graceful exit
-qx.App.run()
+app.run()
