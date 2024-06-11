@@ -6,3 +6,4 @@ opentelemetry-instrumentation-kafka-python
 opentelemetry-exporter-otlp-proto-http
 opentelemetry-exporter-otlp-proto-grpc
 pandas
+python-dotenv
