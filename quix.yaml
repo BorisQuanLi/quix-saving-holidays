@@ -54,12 +54,12 @@ deployments:
   - name: "\U0001F4BE InfluxDB Machine Data"
     application: write_rawdata
     deploymentType: Service
-    version: 8e25674339b910d0b9470c02d8d77a427fda56e0
+    version: 343ead7ada00d0029b0cc3b1a6d1d610c48684e8
     resources:
       cpu: 200
       memory: 500
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -220,21 +220,18 @@ deployments:
 # This section describes the Topics of the data pipeline
 topics:
   - name: influxdb
-    persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: 10080
       retentionInBytes: 52428800
   - name: detection-results
-    persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: 10080
       retentionInBytes: 52428800
   - name: rawdata
-    persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
